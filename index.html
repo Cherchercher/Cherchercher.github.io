@@ -1,11 +1,23 @@
 <!doctype html>
 <html>
 <head>
-    <link rel="stylesheet" href="/bootstrap/bootstrap.min.css">
-    <script src="/jquery/jquery.min.js"></script>
-    <script src="/bootstrap/bootstrap.min.js"></script>
-    <script src="script.js"></script>
+    <!--<link rel="stylesheet" href="/bootstrap/bootstrap.min.css">-->
+    <!--<script src="/jquery/jquery.min.js"></script>-->
+    <!--<script src="/bootstrap/bootstrap.min.js"></script>-->
+    <!--<script src="script.js"></script>-->
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!--<link rel="stylesheet" href="style.css">-->
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <style>
 
 
@@ -107,7 +119,7 @@ $(document).ready(function()
                 <h3><b>Student Grade Table</b></h3>
             </div>
             <div class="col-xs-0 col-md-12 pull-right onMobile onmobileGradeAverageNumber"><h3><small>
-                Grade Average : <span class="label label-default avgGrade">0</span></small></h3>
+                Grade Average : <span class="label label-default avgGrade"><span class="avgGradeSpan">0</span></span></small></h3>
 
             </div>
         </div>
@@ -118,7 +130,7 @@ $(document).ready(function()
                     <h1>Student Grade Table</h1>
                 </div>
                 <div class="col-xs-0 col-md-12 nonMobile nonMobileGradeAverageNumber"><h2><small>
-                   Grade Average : <span class="label label-default avgGrade">0</span></small></h2>
+                   Grade Average : <span class="label label-default avgGrade"><span class="avgGradeSpan">0</span></span></small></h2>
 
                 </div>
             </div>
@@ -162,8 +174,8 @@ $(document).ready(function()
                    placeholder="Student Grade">
         </div>
 
-        <button type="button" class="btn btn-success" onclick="">Add</button>
-        <button type="button" class="btn btn-default" onclick="">Cancel</button>
+        <button type="button" id='add' class="btn btn-success" onclick="">Add</button>
+        <button type="button" id='cancel' class="btn btn-default" onclick="">Cancel</button>
     </div>
     <div class="student-list-container">
         <table class="student-list">
