@@ -10,6 +10,7 @@
 <script>
         var student_array=[];
         var grade_array=[];
+        var i=student_array.length-1;
         function add_student()
         {
             var student={ name:"",
@@ -31,6 +32,7 @@
   
 
         function list_students() {
+                  $('tablebody').attr("id","tbody");
                    var list = $("#tbody");
                    list.html('');
             for (var j = 0; j < student_array.length; j++) {
@@ -73,15 +75,15 @@
             }
         }
        
-
-        function cancel_student(){
-             var list = $("#tbody");
-            list.empty();
-
+              
+              
         }
               
+        function reset_student(){
+           location.reload();
+        }
 $(document).ready(function()
-    {    
+    {
         $("#add").click(function () {
                 add_student();
                 list_students();
@@ -91,6 +93,11 @@ $(document).ready(function()
         $("#cancel").click(function() {
                 cancel_student();
                 console.log("cancel button clicked");
+                 });
+        $("#reset").click(function() {
+            reset_student();
+            console.log("reset button clicked")
+       
         });
     });
  
@@ -129,8 +136,9 @@ $(document).ready(function()
             <input type="text" class="" name="studentGrade" id="studentGrade"
                    placeholder="Student Grade">
         </div>
-        <button type="button" class="" onclick="" id="add">Add</button>
+        <button type="button" class="" onclick="" id="add" >Add</button>
         <button type="button" class="" onclick="" id="cancel">Cancel</button>
+        <button type="button" class="" onclick="" id="reset">Reset</button>
     </div>
     <div class="student-list-container">
         <table class="student-list">
