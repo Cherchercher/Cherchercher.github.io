@@ -5,6 +5,7 @@
     <!--<script src="/jquery/jquery.min.js"></script>-->
     <!--<script src="/bootstrap/bootstrap.min.js"></script>-->
     <!--<script src="script.js"></script>-->
+
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -26,6 +27,7 @@
 <script>
         var student_array=[];
         var grade_array=[];
+        var i=student_array.length-1;
         function add_student()
         {
             var student={ name:"",
@@ -88,16 +90,21 @@
             avg.append(thisavg);
             }
         }
-       
-
+             
         function cancel_student(){
+            student_array=[];
              var list = $("#tbody");
             list.empty();
 
         }
-              
-$(document).ready(function()
-    {    
+            
+        function reset_student(){
+           location.reload();
+        }
+
+
+     $(document).ready(function()
+    {
         $("#add").click(function () {
                 add_student();
                 list_students();
@@ -107,6 +114,11 @@ $(document).ready(function()
         $("#cancel").click(function() {
                 cancel_student();
                 console.log("cancel button clicked");
+                 });
+        $("#reset").click(function() {
+            reset_student();
+            console.log("reset button clicked")
+       
         });
     });
  
@@ -174,8 +186,10 @@ $(document).ready(function()
                    placeholder="Student Grade">
         </div>
 
-        <button type="button" id='add' class="btn btn-success" onclick="">Add</button>
-        <button type="button" id='cancel' class="btn btn-default" onclick="">Cancel</button>
+        <button type="button" class="btn btn-success" onclick="" id="add" >Add</button>
+        <button type="button" class="btn btn-default" onclick="" id="cancel">Cancel</button>
+        <button type="button" class="btn btn-default" onclick="" id="reset">Reset</button>
+
     </div>
     <div class="student-list-container">
         <table class="student-list">
