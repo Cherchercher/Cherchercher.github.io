@@ -11,6 +11,94 @@
 
     </style>
 </head>
+<script>
+        var student_array=[];
+        var grade_array=[];
+        function add_student()
+        {
+            var student={ name:"",
+                course:"",
+                grade: ""
+            };
+            //Get
+            var name=$('#studentName').val();
+            var grade=$('#studentGrade').val();
+            var course=$('#course').val();
+            student.name=name;
+            student.grade=grade;
+            student.course=course;
+            student_array.push(student);
+            grade_array.push(student.grade);
+            console.log(student_array);
+           
+        }
+  
+
+        function list_students() {
+                   var list = $("#tbody");
+                   list.html('');
+            for (var j = 0; j < student_array.length; j++) {
+                  
+                  var thisname = $("<div>", {
+                            id: j,
+                            'text': student_array[j].name
+                        });
+                thisname.addClass('col-md-4');
+                thisname.attr('id');
+                list.append(thisname);
+
+
+
+                  var thiscourse = $("<div>", {
+                            id: j,
+                            'text': student_array[j].course
+                        });
+                thiscourse.addClass('col-md-4');
+                thiscourse.attr('id');
+                list.append(thiscourse);
+
+                  var thisgrade = $("<div>", {
+                            id: j,
+                            'text': student_array[j].grade
+                        });
+                thisgrade.addClass('col-md-4');
+                thisgrade.attr('id');
+                list.append(thisgrade);
+                        var  sum = 0;
+       $.each(grade_array,function(){sum+=parseFloat(this) || 0;});
+        console.log(sum);
+        var avg= $(".avgGrade");
+            avg.html('');
+             var thisavg= $("<div>",{
+                'text': sum/student_array.length
+            });
+            console.log(thisavg);
+            avg.append(thisavg);
+            }
+        }
+       
+
+        function cancel_student(){
+             var list = $("#tbody");
+            list.empty();
+
+        }
+              
+$(document).ready(function()
+    {    
+        $("#add").click(function () {
+                add_student();
+                list_students();
+                console.log("add button clicked");
+            });
+
+        $("#cancel").click(function() {
+                cancel_student();
+                console.log("cancel button clicked");
+        });
+    });
+ 
+</script>
 <body>
 <div class="container">
     <div class="row headerRow">
@@ -74,7 +162,6 @@
                    placeholder="Student Grade">
         </div>
 
-
         <button type="button" class="btn btn-success" onclick="">Add</button>
         <button type="button" class="btn btn-default" onclick="">Cancel</button>
     </div>
@@ -88,13 +175,14 @@
                 <th>Operations</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody">
             </tbody>
         </table>
     </div>
 </div>
 </body>
 </html>
+
 <style>
     @media screen and (min-width: 360px)
     {
@@ -111,3 +199,4 @@
         }
     }
 </style>
+
