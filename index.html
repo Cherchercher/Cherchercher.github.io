@@ -39,78 +39,93 @@
             var grade=$('#studentGrade').val();
             var course=$('#course').val();
             student.name=name;
-            student.grade=grade;
+            student.grade=parseInt(grade);
             student.course=course;
             student_array.push(student);
             grade_array.push(student.grade);
             console.log(student_array);
            
         }
-              
-        
+        var sample_student_array = [
+            {name: 'Todd', course:'Algebra', grade:80},
+            {name: 'Cher', course:'Art History', grade: 81}
+        ];
         function list_students() {
-                   var list = $("#tbody");
-                    
-                   list.html('');
-               var nametable= $("<div>",{
-                        'text':"Student Name"
-                      });
-                      nametable.addClass('col-md-4');
-                      nametable.css("font-weight","bold");
-               var coursetable= $("<div>",{
-                        'text':"Student Course"
-                      });
-                      coursetable.addClass('col-md-4');
-                      coursetable.css("font-weight","bold");
-               var gradetable= $("<div>",{
-                        'text':"Student Grade"
-                      });
-                      gradetable.addClass('col-md-4');
-                      gradetable.css("font-weight","bold");
-                      list.append(nametable);
-                      list.append(coursetable);
-                      list.append(gradetable);
-             for (var j = 0; j < student_array.length; j++) {
-                  
+           var list = $("#tbody");
+            list.html('');
+            //create column header
 
-                  var thisname = $("<div>", {
-                            id: j,
-                            'text': student_array[j].name
-                        });
-                thisname.addClass('col-md-4');
-                thisname.attr('id');
-                list.append(thisname);
+            /*
+             <thead>
+                 <tr>
+                     <td>Student Name</td>
+                     <td>Student Course</td>
+                     <td>Student Grade</td>
+                 </tr>
+             </thead>
+             */
+            //don't need to do this, it is static and never changes
+//            var table_head = $('<thead>');
+//            var table_row =  $("<tr>");
+//
+//            var name_column= $("<td>",{
+//                    'text':"Student Name"
+//            });
+//            var course_column= $("<td>",{
+//                    'text':"Student Course"
+//            });
+//
+//            var grade_column= $("<td>",{
+//                    'text':"Student Grade"
+//            });
+//
+//            table_row.append(name_column, course_column, grade_column);
+//            table_head.append(table_row);
+//            list.append(table_head);
+//end of "don' need to do this, it is static and never changes
+            //add the student elements
 
+            for (var j = 0; j < student_array.length; j++)
+            {
 
-
-                  var thiscourse = $("<div>", {
-                            id: j,
-                            'text': student_array[j].course
-                        });
-                thiscourse.addClass('col-md-4');
-                thiscourse.attr('id');
-                list.append(thiscourse);
-
-                  var thisgrade = $("<div>", {
-                            id: j,
-                            'text': student_array[j].grade
-                        });
-                thisgrade.addClass('col-md-4');
-                thisgrade.attr('id');
-                list.append(thisgrade);
-                        var  sum = 0;
-       $.each(grade_array,function(){sum+=parseFloat(this) || 0;});
-        console.log(sum);
-        var avg= $(".avgGrade");
-            avg.html('');
-             var thisavg= $("<div>",{
-                'text': sum/student_array.length
-            });
-            console.log(thisavg);
-            avg.append(thisavg);
+                list.append( add_one_student(student_array[j]));
+//                $.each(grade_array,function(){sum+=parseFloat(this) || 0;});
+//                console.log(sum);
+//                var avg= $(".avgGrade");
+//                avg.html('');
+//                var thisavg= $("<div>",{
+//                    'text': sum/student_array.length
+//                });
+//                list.append(thisname, thiscourse, thisgrade);
+//                console.log(thisavg);
+//                avg.append(thisavg);
             }
+            display_average_grade();
         }
-             
+        function add_one_student(student){ // takes student_array[j] element as input
+            var student_row = $("<tr>").addClass('student_row');
+            var student_name = $("<td>").addClass('student_name col-xs-3').text(student.name);
+            var student_course = $("<td>").addClass('student_course col-xs-3').text(student.course);
+            var student_grade = $("<td>").addClass('student_grade col-xs-3').text(student.grade);
+            student_row.append(student_name, student_course, student_grade);
+            return student_row;
+        }
+
+        function calculate_average_grade()
+        {
+            var average=0;
+            var sum=0;
+            for (i=0; i < student_array.length; i++)
+            {
+                sum = sum + student_array[i].grade;
+            }
+            average= sum / student_array.length;
+            return average;
+        }
+        function display_average_grade(){
+            var average_grade = calculate_average_grade();
+            $('.avgGrade').text(average_grade);
+        }
         function cancel_student(){
             student_array=[];
              var list = $("#tbody");
@@ -214,16 +229,13 @@
     <div class="student-list-container">
         <table class="student-list">
             <thead>
-            <tr>
-                <th><th>
-                      <th><th>
-                          <th><th>
-              
-              
-            </tr>
+                <tr>
+                    <td class="col-xs-3">Student Name</td>
+                    <td class="col-xs-3">Student Course</td>
+                    <td class="col-xs-3">Student Grade</td>
+                </tr>
             </thead>
             <tbody id="tbody">
-         
             </tbody>
         </table>
     </div>
