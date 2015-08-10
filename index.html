@@ -46,13 +46,33 @@
             console.log(student_array);
            
         }
-  
-
+              
+        
         function list_students() {
                    var list = $("#tbody");
+                    
                    list.html('');
-            for (var j = 0; j < student_array.length; j++) {
+               var nametable= $("<div>",{
+                        'text':"Student Name"
+                      });
+                      nametable.addClass('col-md-4');
+                      nametable.css("font-weight","bold");
+               var coursetable= $("<div>",{
+                        'text':"Student Course"
+                      });
+                      coursetable.addClass('col-md-4');
+                      coursetable.css("font-weight","bold");
+               var gradetable= $("<div>",{
+                        'text':"Student Grade"
+                      });
+                      gradetable.addClass('col-md-4');
+                      gradetable.css("font-weight","bold");
+                      list.append(nametable);
+                      list.append(coursetable);
+                      list.append(gradetable);
+             for (var j = 0; j < student_array.length; j++) {
                   
+
                   var thisname = $("<div>", {
                             id: j,
                             'text': student_array[j].name
@@ -195,13 +215,15 @@
         <table class="student-list">
             <thead>
             <tr>
-                <th>Student Name</th>
-                <th>Student Course</th>
-                <th>Student Grade</th>
-                <th>Operations</th>
+                <th><th>
+                      <th><th>
+                          <th><th>
+              
+              
             </tr>
             </thead>
             <tbody id="tbody">
+         
             </tbody>
         </table>
     </div>
