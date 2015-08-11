@@ -25,22 +25,22 @@
     </style>
 </head>
 <script>
-        var student_array=[];
-        var grade_array=[];
+        var student_array=[]; // array to hold student data
+        var grade_array=[]; // array to hold student grades
         var i=student_array.length-1;
-        student_array = [{"name":"Chang","course":"ETR","grade":88},{"name":"Frank","course":"gf","grade":55}];
+//        student_array = [{"name":"Chang","course":"ETR","grade":88},{"name":"Frank","course":"gf","grade":55}]; // used for testing
         function add_student()
         {
             var student={ name:"",
                 course:"",
                 grade: ""
-            };
-            //Get
+             };
+
             var name=$('#studentName').val();
             var grade=$('#studentGrade').val();
             var course=$('#course').val();
             student.name=name;
-            student.grade=parseInt(grade);
+            student.grade=parseFloat(grade);
             student.course=course;
             student_array.push(student);
             grade_array.push(student.grade);
@@ -53,10 +53,9 @@
         ];
         function list_students() {
            var list = $("#tbody");
-            list.html('');
-            //create column header
+            list.html('');            //create column header
 
-            for (var j = 0; j < student_array.length; j++)
+            for (var j = 0; j < student_array.length; j++) // for loop to add student data to dom
             {
                 var student = add_one_student(student_array[j]);
                 student.attr('student_index',j);
@@ -74,7 +73,7 @@
             }
             display_average_grade();
         }
-        function add_one_student(student){ // takes student_array[j] element as input
+        function add_one_student(student){ // takes student_array[j] element as input, passed in student_array[j] from for loop
             var student_row = $("<tr>").addClass('student_row');
             var student_name = $("<td>").addClass('student_name col-xs-3').text(student.name);
             var student_course = $("<td>").addClass('student_course col-xs-3').text(student.course);
@@ -134,6 +133,7 @@
 
      $(document).ready(function()
     {
+        loadData();
         list_students();
         $("#add").click(function () {
                 add_student();
@@ -146,11 +146,6 @@
                 cancel_student();
                 console.log("cancel button clicked");
                  });
-//        console.log ('checking delBtn',$(".delBtn"));
-//        $(".delBtn").click(function() {  // click handler for delete student button
-//            console.log("removeStudent clicked");
-//            removeStudent();
-//        });
 
     });
 
