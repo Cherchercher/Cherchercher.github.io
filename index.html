@@ -56,36 +56,6 @@
             list.html('');
             //create column header
 
-            /*
-             <thead>
-                 <tr>
-                     <td>Student Name</td>
-                     <td>Student Course</td>
-                     <td>Student Grade</td>
-                 </tr>
-             </thead>
-             */
-            //don't need to do this, it is static and never changes
-//            var table_head = $('<thead>');
-//            var table_row =  $("<tr>");
-//
-//            var name_column= $("<td>",{
-//                    'text':"Student Name"
-//            });
-//            var course_column= $("<td>",{
-//                    'text':"Student Course"
-//            });
-//
-//            var grade_column= $("<td>",{
-//                    'text':"Student Grade"
-//            });
-//
-//            table_row.append(name_column, course_column, grade_column);
-//            table_head.append(table_row);
-//            list.append(table_head);
-//end of "don' need to do this, it is static and never changes
-            //add the student elements
-
             for (var j = 0; j < student_array.length; j++)
             {
                 var student = add_one_student(student_array[j]);
@@ -155,9 +125,7 @@
         function removeStudent(targetElement) // runs on clicking delete button on student row
         {
             var studentRow = $(targetElement).parents('.student_row');
-            //################################## I am working here
             var row_delete = studentRow.attr('student_index');
-
             console.log (row_delete, 'via remove student function, student array=', student_array);
             delete student_array[row_delete]; // removes student from array
             console.log (student_array,'is student array');
