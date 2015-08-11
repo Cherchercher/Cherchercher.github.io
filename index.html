@@ -28,6 +28,7 @@
         var student_array=[];
         var grade_array=[];
         var i=student_array.length-1;
+        student_array = [{"name":"Chang","course":"ETR","grade":88},{"name":"Frank","course":"gf","grade":55}];
         function add_student()
         {
             var student={ name:"",
@@ -109,7 +110,12 @@
             var student_course = $("<td>").addClass('student_course col-xs-3').text(student.course);
             var student_grade = $("<td>").addClass('student_grade col-xs-3').text(student.grade);
             var delete_button_td = $("<td>").addClass('delete_col col-xs-3');
-            var delete_button = $('<button>').attr('type','button').addClass('btn btn-danger').text('Delete').attr('id','del_btn');
+            var delete_button = $('<button>').attr('type','button').addClass('btn btn-danger delBtn').text('Delete');
+            delete_button.click(function()
+            {
+                console.log ('testing delete button',this);
+                removeStudent(this);
+            });
             delete_button_td.append(delete_button);
 
             student_row.append(student_name, student_course, student_grade,delete_button_td);
@@ -146,14 +152,21 @@
             reset_student();
             console.log("reset button clicked")
         });
-        function delete_student() // runs on clicking delete button on student row
+        function removeStudent(targetElement) // runs on clicking delete button on student row
         {
-            var row_delete = $(this).parent().attr('id');
-            console.log (row_delete);
+            var studentRow = $(targetElement).parents('.student_row');
+            //################################## I am working here
+            var row_delete = studentRow.attr('student_index');
+
+            console.log (row_delete, 'via remove student function, student array=', student_array);
+            delete student_array[row_delete]; // removes student from array
+            console.log (student_array,'is student array');
+            studentRow.remove();
         }
 
      $(document).ready(function()
     {
+        list_students();
         $("#add").click(function () {
                 add_student();
                 list_students();
@@ -161,15 +174,16 @@
                 console.log("add button clicked");
             });
 
-        $("#cancel").click(function() {
+        $("#cancel").click(function() { // click handler for cancel button- clears input boxes
                 cancel_student();
                 console.log("cancel button clicked");
                  });
-        $("#del_btn").click(function() {
-            console.log("delete_student clicked")
+//        console.log ('checking delBtn',$(".delBtn"));
+//        $(".delBtn").click(function() {  // click handler for delete student button
+//            console.log("removeStudent clicked");
+//            removeStudent();
+//        });
 
-            delete_student();
-        });
     });
 
 
