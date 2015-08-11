@@ -35,17 +35,18 @@
             $.ajax(
             {
                 dataType: 'json',
-                url: 'http://s-apis.learningfuze.com/sgt/get',
+                url: 'http://s-apis.learningfuze.com/sgt1/get',
                 type: 'GET',
-                success: function(response)
+                success: function(response) // api sucess handler
                 {
                     console.log ('loaded', response);
                     student_array = response.data;
+                },
+                error : function(xhr, thrownError) // api failure handler
+                {
+                    alert (xhr.status+' is the status of the alert');
+                    alert (thrownError+' in getting information from the server');
                 }
-//                failure : function
-//                {
-//
-//                };
             })
         }
 //        student_array = [{"name":"Chang","course":"ETR","grade":88},{"name":"Frank","course":"gf","grade":55}]; // used for testing
@@ -117,7 +118,7 @@
             var sum=0;
             for (i=0; i < student_array.length; i++)
             {
-                sum = sum + parseInt(student_array[i].grade);
+                sum = sum + parseFloat(student_array[i].grade);
             }
             average= sum / student_array.length;
             return average;
