@@ -28,6 +28,26 @@
         var student_array=[]; // array to hold student data
         var grade_array=[]; // array to hold student grades
         var i=student_array.length-1;
+
+        function loadData()
+        {
+            console.log ('load data called');
+            $.ajax(
+            {
+                dataType: 'json',
+                url: 'http://s-apis.learningfuze.com/sgt/get',
+                type: 'GET',
+                success: function(response)
+                {
+                    console.log ('loaded', response);
+                    student_array = response.data;
+                }
+//                failure : function
+//                {
+//
+//                };
+            })
+        }
 //        student_array = [{"name":"Chang","course":"ETR","grade":88},{"name":"Frank","course":"gf","grade":55}]; // used for testing
         function add_student()
         {
