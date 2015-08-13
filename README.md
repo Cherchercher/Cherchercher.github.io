@@ -31,5 +31,5 @@ we will determine if the data is correctly formatted then iterate through the da
 #### Description
 Version 2.0 is where we start sending data back to the server through a pre defined API to be stored in a database. When a students info is entered it will be sent to the server to be stored. After the student has been added data should be pulled from the server to update your table.
 
-- <a href="https://github.com/Learning-Fuze/SGT/tree/v2.0#scope">View Scope</a>
+- <a href="https://github.com/Learning-Fuze/SGT/tree/v2.0#scope">View Scope</a> 
 - <a href="https://github.com/Learning-Fuze/SGT/tree/v2.0#assignments---aka-criteria-for-success-on-this-version-of-the-project">View Assignments</a>
