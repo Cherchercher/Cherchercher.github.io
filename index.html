@@ -31,6 +31,7 @@
         var i=student_array.length-1;
         var globalResponse = '';
         var dataInvalidTrigger= false;
+        var add_student_array=[];
 
         function loadData() // loads data from the server via ajax call
         {
@@ -84,6 +85,29 @@
             return valid_data;
         }
 //        student_array = [{"name":"Chang","course":"ETR","grade":88},{"name":"Frank","course":"gf","grade":55}]; // used for testing
+
+        function send_data(name,course,grade)
+        {
+            console.log ('send_data running');
+            $.ajax({
+                dataType:'json',
+                data:{name:name, course:course, grade:grade},
+                method:'POST',
+                url:'http://s-apis.learningfuze.com/sgt/create',
+                success: function(response) // if call went though
+                {
+                console.log ('awesome!,',add_student_array,' data sent via send_data() response=', response)
+                    loadData();
+                    cancel_student();
+                },
+                error : function(xhr, thrownError) // api failure handler
+                {
+                    console.log ('error sending data with send_data()');
+                    alert (xhr.status+' is the status of the alert');
+                    alert (thrownError+' in getting information from the server');
+                }
+            })
+        }
         function add_student()
         {
             if (validateInputData())
@@ -102,13 +126,14 @@
                 student.name = name;
                 student.grade = parseFloat(grade);
                 student.course = course;
-                student_array.push(student);
-                grade_array.push(student.grade);
-                console.log(student_array);
+                add_student_array.push(student);
+//                grade_array.push(student.grade); not needed v2.0
+                console.log(add_student_array);
+                send_data(name,course,grade)
             }
             else  // if invalid data --- with more time, add switch to alert for each type of invalid data // needswork - turn grade string into number,
             {
-                ale1rt ('invalid data detected!');
+                alert ('invalid data detected!');
             }
         }
         var sample_student_array = [
@@ -188,11 +213,9 @@
      $(document).ready(function()
     {
         loadData();
-        list_students();
         $("#add").click(function () {
                 add_student();
-                list_students();
-//                cancel_student();
+//                list_students(); // not needed for v2.0
                 console.log("add button clicked");
         });
 
@@ -206,7 +229,6 @@
             reset_student();
             console.log("reset button clicked")
         });
-
     });
 
 
