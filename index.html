@@ -20,8 +20,9 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <style>
-
-
+        .invalid_input{
+            border: 2px solid red;
+        }
     </style>
 </head>
 <script>
@@ -29,20 +30,22 @@
         var grade_array=[]; // array to hold student grades
         var i=student_array.length-1;
         var globalResponse = '';
+        var dataInvalidTrigger= false;
 
-        function loadData()
+        function loadData() // loads data from the server via ajax call
         {
             console.log ('load data called');
             $.ajax(
             {
                 dataType: 'json',
-                url: 'http://s-apis.learningfuze.com/sgt1/get',
+                url: 'http://s-apis.learningfuze.com/sgt/get',
                 type: 'GET',
                 success: function(response) // api sucess handler
                 {
                     console.log ('loaded', response);
                     student_array = response.data;
                     globalResponse = response;
+                    list_students();
                 },
                 error : function(xhr, thrownError) // api failure handler
                 {
@@ -51,38 +54,68 @@
                 }
             })
         }
-
-        function validateData () //checks data to ensure not just empty string
+        function removeInvalidInputClass() //removes the border on an input with invalid data
         {
-            if (globalResponse == typeof(null) || globalResponse == '')
-            {
-                alert('data from server is invalid')
+            $('.invalid_input').removeClass('invalid_input');
+        }
+        function validateInputData() //checks data for valid type
+        {
+
+            removeInvalidInputClass();  // .class tag to add red border to invalid input box
+            var name = $('#studentName').val();
+            var grade = parseInt($('#studentGrade').val());
+            var course = $('#course').val();
+            var valid_data = true;
+            if(name.length<2){
+                $('#studentName').addClass('invalid_input');
+                alert('Name must be at least 2 letters long');
+                valid_data=false;
             }
+            if(course.length<2){
+                $('#course').addClass('invalid_input');
+                alert('Course must be at least 2 letters long');
+                valid_data=false;
+            }
+            if(isNaN(grade) || grade<0 || grade>100){
+                $('#studentGrade').addClass('invalid_input');
+                alert('Grade must be a number between 0 and 100');
+                valid_data=false;
+            }
+            return valid_data;
         }
 //        student_array = [{"name":"Chang","course":"ETR","grade":88},{"name":"Frank","course":"gf","grade":55}]; // used for testing
         function add_student()
         {
-            var student={ name:"",
-                course:"",
-                grade: ""
-             };
+            if (validateInputData())
+            {
 
-            var name=$('#studentName').val();
-            var grade=$('#studentGrade').val();
-            var course=$('#course').val();
-            student.name=name;
-            student.grade=parseFloat(grade);
-            student.course=course;
-            student_array.push(student);
-            grade_array.push(student.grade);
-            console.log(student_array);
+                var student =
+                {
+                    name: "",
+                    course: "",
+                    grade: ""
+                };
 
+                var name = $('#studentName').val();
+                var grade = $('#studentGrade').val();
+                var course = $('#course').val();
+                student.name = name;
+                student.grade = parseFloat(grade);
+                student.course = course;
+                student_array.push(student);
+                grade_array.push(student.grade);
+                console.log(student_array);
+            }
+            else  // if invalid data --- with more time, add switch to alert for each type of invalid data // needswork - turn grade string into number,
+            {
+                ale1rt ('invalid data detected!');
+            }
         }
         var sample_student_array = [
             {name: 'Todd', course:'Algebra', grade:80},
             {name: 'Cher', course:'Art History', grade: 81}
         ];
-        function list_students() {
+        function list_students() { // lists students in array into document
            var list = $("#tbody");
             list.html('');            //create column header
 
@@ -91,20 +124,11 @@
                 var student = add_one_student(student_array[j]);
                 student.attr('student_index',j);
                 list.append(student);
-//                $.each(grade_array,function(){sum+=parseFloat(this) || 0;});
-//                console.log(sum);
-//                var avg= $(".avgGrade");
-//                avg.html('');
-//                var thisavg= $("<div>",{
-//                    'text': sum/student_array.length
-//                });
-//                list.append(thisname, thiscourse, thisgrade);
-//                console.log(thisavg);
-//                avg.append(thisavg);
             }
             display_average_grade();
         }
         function add_one_student(student){ // takes student_array[j] element as input, passed in student_array[j] from for loop
+
             var student_row = $("<tr>").addClass('student_row');
             var student_name = $("<td>").addClass('student_name col-xs-3').text(student.name);
             var student_course = $("<td>").addClass('student_course col-xs-3').text(student.course);
@@ -122,7 +146,7 @@
             return student_row;
         }
 
-        function calculate_average_grade()
+        function calculate_average_grade() // calculates average grade based on ALL grades, and displays result
         {
             var average=0;
             var sum=0;
@@ -130,28 +154,27 @@
             {
                 sum = sum + parseFloat(student_array[i].grade);
             }
-            average= sum / student_array.length;
+            avgerage = (sum / student_array.length);
+            average= avgerage.toFixed(2);
             return average;
         }
-        function display_average_grade(){
+        function display_average_grade(){ // calls calculate average grade and then displays average grade
             var average_grade = calculate_average_grade();
             $('.avgGrade').text(average_grade);
         }
-        function cancel_student(){
+        function cancel_student(){ // will clear the input boxes' values
+            console.log ('cancel student function running');
+            removeInvalidInputClass();
+            $('.form-control').val('');
+        }
+
+        function reset_student(){ // clears all newly inputed data, and loads existing data from the database
+            removeInvalidInputClass();
             student_array=[];
-             var list = $("#tbody");
-            list.empty();
-
+            location.reload();
+            list_students();
         }
 
-        function reset_student(){
-           location.reload();
-        }
-
-        $("#reset").click(function() {
-            reset_student();
-            console.log("reset button clicked")
-        });
         function removeStudent(targetElement) // runs on clicking delete button on student row
         {
             var studentRow = $(targetElement).parents('.student_row');
@@ -171,12 +194,18 @@
                 list_students();
 //                cancel_student();
                 console.log("add button clicked");
-            });
+        });
 
         $("#cancel").click(function() { // click handler for cancel button- clears input boxes
                 cancel_student();
                 console.log("cancel button clicked");
-                 });
+         });
+
+        $("#reset").click(function()
+        {
+            reset_student();
+            console.log("reset button clicked")
+        });
 
     });
 
@@ -228,14 +257,6 @@
             <input type="text" class="form-control" name="course" id="course" placeholder="Student Course"/>
         </div>
 
-
-        <!--<div class="">-->
-            <!--<span class="">-->
-                <!--<span class="glyphicon"></span>-->
-            <!--</span>-->
-            <!--<input type="text" class="form-control" name="course" id="course"-->
-                   <!--placeholder="Student Course">-->
-        <!--</div>-->
         <label class="control-label" for=""></label><!-- kinda hacky, time constraint-->
         <div class="input-group">
 
