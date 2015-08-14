@@ -1,7 +1,11 @@
 /**
  * Define all global variables here
  */
-
+/**
+ * student_array - global array to hold student objects
+ * @type {Array}
+ */
+var student_array=[]; // array to hold student datal
 var grade_array=[]; // array to hold student grades
 var i=student_array.length-1;
 var globalResponse = '';
@@ -9,11 +13,7 @@ var dataInvalidTrigger= false;
 var add_student_array=[];
 
 
-/**
- * student_array - global array to hold student objects
- * @type {Array}
- */
-var student_array=[]; // array to hold student datal
+
 
 
 
@@ -80,7 +80,6 @@ function validateInputData() //checks data for valid type
     }
     return valid_data;
 }
-//        student_array = [{"name":"Chang","course":"ETR","grade":88},{"name":"Frank","course":"gf","grade":55}]; // used for testing
 
 function send_data(name,course,grade) // sends name,course and grade to the server and then refreshes dom with new data
 {
@@ -150,7 +149,7 @@ function list_students() { // lists students in array into document
     for (var j = 0; j < student_array.length; j++) // for loop to add student data to dom
     {
         var student = add_one_student(student_array[j]); // adds student at student_array[j] to the dom
-        student.attr('student_index',j);
+        student.attr('student_index',student_array[j].id);
         list.append(student);
     }
     display_average_grade();
@@ -161,7 +160,8 @@ function list_students() { // lists students in array into document
  * into the .student_list tbody
  * @param studentObj
  */
-function add_one_student(student){ // takes student_array[j] element as input, passed in student_array[j] from for loop
+function add_one_student(student)
+{ // takes student_array[j] element as input, passed in student_array[j] from for loop
 
     var student_row = $("<tr>").addClass('student_row');
     var student_name = $("<td>").addClass('student_name col-xs-3').text(student.name);
@@ -169,11 +169,13 @@ function add_one_student(student){ // takes student_array[j] element as input, p
     var student_grade = $("<td>").addClass('student_grade col-xs-3').text(student.grade);
     var delete_button_td = $("<td>").addClass('delete_col col-xs-3');
     var delete_button = $('<button>').attr('type','button').addClass('btn btn-danger delBtn').text('Delete');
+
     delete_button.click(function()
     {
         console.log ('testing delete button',this);
         removeStudent(this);
     });
+
     delete_button_td.append(delete_button);
     // delete // add a modal asking if sure, then click on button there, have button there call delete2, which sends message to server
 
@@ -226,10 +228,40 @@ function reset_student(){ // clears all newly imputed data, and loads existing d
 function removeStudent(targetElement) // runs on clicking delete button on student row
 {
     var studentRow = $(targetElement).parents('.student_row');
+    console.log ('removeStudent called, target element=',targetElement);
     var row_delete = studentRow.attr('student_index');
-    console.log (row_delete, 'via remove student function, student array=', student_array);
-    delete student_array[row_delete]; // removes student from array
+
+
     console.log (student_array,'is student array');
+
+    $.ajax({
+        dataType: 'json',
+        data: {student_id: row_delete},
+        method: 'POST',
+        url: 'http://s-apis.learningfuze.com/sgt/delete',
+        success: function (response) // if call went though
+        {
+            console.log('awesome!, data sent via send_data() response=', response);
+
+            console.log(row_delete, 'delete success! via remove student function');
+            delete student_array[row_delete]; // removes student from array
+            if (response == true) // checks to see that server data is true before removing row from dom
+            {
+                delete student_array[row_delete]; // removes student from array,
+            }
+            return response;
+
+            //load_data(); // for testing
+        },
+        error: function (xhr, thrownError) // api failure handler
+        {
+            console.log('error sending data with send_data()');
+            alert(xhr.status + ' is the status of the alert');
+            alert(thrownError + ' in getting information from the server');
+            return response;
+        }
+    });
+
     studentRow.remove();
 }
 function server_data_refresh() // queries the server periodically for new student data
