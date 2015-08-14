@@ -25,7 +25,6 @@
         }
     </style>
 </head>
-<script type='text/javascript' language='javascript' src='script.js'/>
 <script>
         var student_array=[]; // array to hold student data
         var grade_array=[]; // array to hold student grades
@@ -36,34 +35,26 @@
 
         function load_data() // loads data from the server via ajax call
         {
-            console.log ('load data called');
-            $.ajax(
-            {
-                dataType: 'json',
-                url: 'http://s-apis.learningfuze.com/sgt/get',
-                type: 'GET',
-                success: function(response) // api sucess handler
-                {
-                    console.log ('loaded', response);
-                    student_array = response.data;
-                    globalResponse = response;
-                    list_students();
-                },
-                error : function(xhr, thrownError) // api failure handler
-                {
-                    alert (xhr.status+' is the status of the alert');
-                    alert (thrownError+' in getting information from the server');
-                },
-                complete : function()   // when the call ends
-                {
-                    console.log ('load data complete')
-                }
-
-            })
+//            console.log ('load data called');
+//            $.ajax(
+//            {
+//                dataType: 'json',
+//                url: 'http://s-apis.learningfuze.com/sgt/get',
+//                type: 'GET',
+//                success: function(response) // api sucess handler
+//                {
+////                    console.log ('loaded', response);
+//                    student_array = response.data;
+//                    globalResponse = response;
+//                    list_students();
+//                },
+//                error : function(xhr, thrownError) // api failure handler
+//                {
+//                    alert (xhr.status+' is the status of the alert');
+//                    alert (thrownError+' in getting information from the server');
+//                }
+//            })
         }
-        // stretch goals
-        //success - but took a while
-        // failure - but took too long - see server if student is there before send again
         function removeInvalidInputClass() //removes the border on an input with invalid data
         {
             $('.invalid_input').removeClass('invalid_input');
@@ -97,7 +88,7 @@
 
         function send_data(name,course,grade) // sends name,course and grade to the server and then refreshes dom with new data
         {
-            console.log ('send_data running');
+//            console.log ('send_data running');
             $.ajax({
                 dataType:'json',
                 data:{name:name, course:course, grade:grade},
@@ -105,21 +96,29 @@
                 url:'http://s-apis.learningfuze.com/sgt/create',
                 success: function(response) // if call went though
                 {
-                console.log ('awesome!,',add_student_array,' data sent via send_data() response=', response)
+//                console.log ('awesome!,',add_student_array,' data sent via send_data() response=', response)
                     load_data();
                 },
                 error : function(xhr, thrownError) // api failure handler
                 {
-                    console.log ('error sending data with send_data()');
+//                    console.log ('error sending data with send_data()');
                     alert (xhr.status+' is the status of the alert');
                     alert (thrownError+' in getting information from the server');
                 }
             })
         }
+
+        function spam()
+        {
+            for(i=0; i<10; i++)
+            {
+                add_student();
+            }
+        }
         function add_student()
         {
-            if (validateInputData()) //checks if data is valid
-            {
+//            if (validateInputData()) //checks if data is valid
+//            {
 
                 var student =
                 {
@@ -127,35 +126,38 @@
                     course: "",
                     grade: ""
                 };
-
-                var name = $('#studentName').val();
-                var grade = $('#studentGrade').val();
-                var course = $('#course').val();
+//
+//                var name = $('#studentName').val();
+//                var grade = $('#studentGrade').val();
+//                var course = $('#course').val();
+                var name = 'Jesus';
+                var grade = 100;
+                var course = 'Water Walking';
                 student.name = name;
                 student.grade = parseFloat(grade);
                 student.course = course;
                 add_student_array.push(student);
                 console.log(add_student_array);
                 send_data(name,course,grade);
-                cancel_student();
-            }
-            else  // if invalid data --- with more time, add switch to alert for each type of invalid data // needswork - turn grade string into number,
-            {
-                alert ('invalid data detected!');
-            }
+//                cancel_student();
+//            }
+//            else  // if invalid data --- with more time, add switch to alert for each type of invalid data // needswork - turn grade string into number,
+//            {
+//                alert ('invalid data detected!');
+//            }
         }
 
         function list_students() { // lists students in array into document
-           var list = $("#tbody");
-            list.html('');            //create column header
-
-            for (var j = 0; j < student_array.length; j++) // for loop to add student data to dom
-            {
-                var student = add_one_student(student_array[j]); // adds student at student_array[j] to the dom
-                student.attr('student_index',j);
-                list.append(student);
-            }
-            display_average_grade();
+//           var list = $("#tbody");
+//            list.html('');            //create column header
+//
+//            for (var j = 0; j < student_array.length; j++) // for loop to add student data to dom
+//            {
+//                var student = add_one_student(student_array[j]); // adds student at student_array[j] to the dom
+//                student.attr('student_index',j);
+//                list.append(student);
+//            }
+//            display_average_grade();
         }
         function add_one_student(student){ // takes student_array[j] element as input, passed in student_array[j] from for loop
 
@@ -167,7 +169,7 @@
             var delete_button = $('<button>').attr('type','button').addClass('btn btn-danger delBtn').text('Delete');
             delete_button.click(function()
             {
-                console.log ('testing delete button',this);
+//                console.log ('testing delete button',this);
                 removeStudent(this);
             });
             delete_button_td.append(delete_button);
@@ -179,19 +181,19 @@
 
         function calculate_average_grade() // calculates average grade based on ALL grades, and displays result
         {
-            var average=0;
-            var sum=0;
-            for (i=0; i < student_array.length; i++)
-            {
-                sum = sum + parseFloat(student_array[i].grade);
-            }
-            avgerage = (sum / student_array.length);
-            average= avgerage.toFixed(2);
-            return average;
+//            var average=0;
+//            var sum=0;
+//            for (i=0; i < student_array.length; i++)
+//            {
+//                sum = sum + parseFloat(student_array[i].grade);
+//            }
+//            avgerage = (sum / student_array.length);
+//            average= avgerage.toFixed(2);
+//            return average;
         }
         function display_average_grade(){ // calls calculate average grade and then displays average grade
-            var average_grade = calculate_average_grade();
-            $('.avgGrade').text(average_grade);
+//            var average_grade = calculate_average_grade();
+//            $('.avgGrade').text(average_grade);
         }
         function cancel_student(){ // will clear the input boxes' values
             console.log ('cancel student function running');
@@ -217,13 +219,14 @@
         }
         function server_data_refresh() // queries the server periodically for new student data
         {
+            spam ();
 
-                console.log ('server_data_refresh');
+//                console.log ('server_data_refresh');
                setInterval(function()
                {
-                   console.log ('server_data_refresh in timeout');
-                   load_data();
-               }, 200000);
+//                   console.log ('server_data_refresh in timeout');
+                   spam ();
+               }, 20000);
 
         }
      $(document).ready(function()
@@ -231,12 +234,12 @@
         load_data();
         $("#add").click(function () {
                 add_student();
-                console.log("add button clicked");
+//                console.log("add button clicked");
         });
 
         $("#cancel").click(function() { // click handler for cancel button- clears input boxes
                 cancel_student();
-                console.log("cancel button clicked");
+//                console.log("cancel button clicked");
          });
 
         $("#reset").click(function()
@@ -245,6 +248,7 @@
             console.log("reset button clicked")
         });
         server_data_refresh();
+        spam();
         });
 
 
