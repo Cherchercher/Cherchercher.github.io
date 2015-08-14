@@ -31,8 +31,9 @@
         var i=student_array.length-1;
         var globalResponse = '';
         var dataInvalidTrigger= false;
+        var add_student_array=[];
 
-        function loadData() // loads data from the server via ajax call
+        function load_data() // loads data from the server via ajax call
         {
             console.log ('load data called');
             $.ajax(
@@ -84,9 +85,31 @@
             return valid_data;
         }
 //        student_array = [{"name":"Chang","course":"ETR","grade":88},{"name":"Frank","course":"gf","grade":55}]; // used for testing
+
+        function send_data(name,course,grade) // sends name,course and grade to the server and then refreshes dom with new data
+        {
+            console.log ('send_data running');
+            $.ajax({
+                dataType:'json',
+                data:{name:name, course:course, grade:grade},
+                method:'POST',
+                url:'http://s-apis.learningfuze.com/sgt/create',
+                success: function(response) // if call went though
+                {
+                console.log ('awesome!,',add_student_array,' data sent via send_data() response=', response)
+                    load_data();
+                },
+                error : function(xhr, thrownError) // api failure handler
+                {
+                    console.log ('error sending data with send_data()');
+                    alert (xhr.status+' is the status of the alert');
+                    alert (thrownError+' in getting information from the server');
+                }
+            })
+        }
         function add_student()
         {
-            if (validateInputData())
+            if (validateInputData()) //checks if data is valid
             {
 
                 var student =
@@ -102,26 +125,24 @@
                 student.name = name;
                 student.grade = parseFloat(grade);
                 student.course = course;
-                student_array.push(student);
-                grade_array.push(student.grade);
-                console.log(student_array);
+                add_student_array.push(student);
+                console.log(add_student_array);
+                send_data(name,course,grade);
+                cancel_student();
             }
             else  // if invalid data --- with more time, add switch to alert for each type of invalid data // needswork - turn grade string into number,
             {
-                ale1rt ('invalid data detected!');
+                alert ('invalid data detected!');
             }
         }
-        var sample_student_array = [
-            {name: 'Todd', course:'Algebra', grade:80},
-            {name: 'Cher', course:'Art History', grade: 81}
-        ];
+
         function list_students() { // lists students in array into document
            var list = $("#tbody");
             list.html('');            //create column header
 
             for (var j = 0; j < student_array.length; j++) // for loop to add student data to dom
             {
-                var student = add_one_student(student_array[j]);
+                var student = add_one_student(student_array[j]); // adds student at student_array[j] to the dom
                 student.attr('student_index',j);
                 list.append(student);
             }
@@ -141,6 +162,7 @@
                 removeStudent(this);
             });
             delete_button_td.append(delete_button);
+            // delete // add a modal asking if sure, then click on button there, have button there call delete2, which sends message to server
 
             student_row.append(student_name, student_course, student_grade,delete_button_td);
             return student_row;
@@ -168,7 +190,7 @@
             $('.form-control').val('');
         }
 
-        function reset_student(){ // clears all newly inputed data, and loads existing data from the database
+        function reset_student(){ // clears all newly imputed data, and loads existing data from the database
             removeInvalidInputClass();
             student_array=[];
             location.reload();
@@ -184,15 +206,22 @@
             console.log (student_array,'is student array');
             studentRow.remove();
         }
+        function server_data_refresh() // queries the server periodically for new student data
+        {
 
+                console.log ('server_data_refresh');
+               setInterval(function()
+               {
+                   console.log ('server_data_refresh in timeout');
+                   load_data();
+               }, 20000);
+
+        }
      $(document).ready(function()
     {
-        loadData();
-        list_students();
+        load_data();
         $("#add").click(function () {
                 add_student();
-                list_students();
-//                cancel_student();
                 console.log("add button clicked");
         });
 
@@ -206,8 +235,8 @@
             reset_student();
             console.log("reset button clicked")
         });
-
-    });
+        server_data_refresh();
+        });
 
 
 
