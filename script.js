@@ -172,7 +172,7 @@ function add_one_student(student)
 
     delete_button.click(function()
     {
-        console.log ('testing delete button',this);
+        //console.log ('testing delete button',this);
         removeStudent(this);
     });
 
@@ -228,15 +228,15 @@ function reset_student(){ // clears all newly imputed data, and loads existing d
 function removeStudent(targetElement) // runs on clicking delete button on student row
 {
     var studentRow = $(targetElement).parents('.student_row');
-    console.log ('removeStudent called, target element=',targetElement);
+    //console.log ('removeStudent called, target element=',targetElement);
     var row_delete = studentRow.attr('student_index');
 
 
-    console.log (student_array,'is student array');
+    //console.log (student_array,'is student array');
 
     $.ajax({
         dataType: 'json',
-        data: {student_id: row_delete},
+        data: {student_id: row_delete},  // 'force-failure':'server'
         method: 'POST',
         url: 'http://s-apis.learningfuze.com/sgt/delete',
         success: function (response) // if call went though
@@ -245,24 +245,28 @@ function removeStudent(targetElement) // runs on clicking delete button on stude
 
             console.log(row_delete, 'delete success! via remove student function');
             delete student_array[row_delete]; // removes student from array
-            if (response == true) // checks to see that server data is true before removing row from dom
+            if (response.success == true) // checks to see that server data is true before removing row from dom
             {
-                delete student_array[row_delete]; // removes student from array,
+                //delete student_array[row_delete]; // removes student from array,
+                console.log (studentRow, 'is student row');
+                studentRow.remove();
             }
-            return response;
-
+            else{ console.log ('success not true')}
             //load_data(); // for testing
         },
         error: function (xhr, thrownError) // api failure handler
         {
-            console.log('error sending data with send_data()');
+
             alert(xhr.status + ' is the status of the alert');
             alert(thrownError + ' in getting information from the server');
+            console.log(response,'error sending data with send_data()');
             return response;
+
+
+
         }
     });
 
-    studentRow.remove();
 }
 function server_data_refresh() // queries the server periodically for new student data
 {
