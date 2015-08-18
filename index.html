@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <style>
+        .col-xs-6 {
+            color:snow;
+            border-radius: 0cm;
+            cursor:pointer;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            -webkit-box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.67);
+            -moz-box-shadow:    0px 0px 30px 0px rgba(0, 255, 0, 0.67);
+            box-shadow:         0px 0px 30px 0px rgba(0, 255, 0, 0.67);
+        }
+        .col-xs-6:hover{
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            -webkit-box-shadow: 0px 0px 30px 0px rgba(255,255,255,255);
+            -moz-box-shadow:    0px 0px 30px 0px rgba(255,255,255,255);
+            box-shadow:         0px 0px 30px 0px rgba(255,255,255,255);
+        }
+        .col-md-4{
+            border-radius: 0cm;
+            cursor:pointer;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            -webkit-box-shadow: 0px 0px 30px 0px rgba(0, 255, 0, 0.67);
+            -moz-box-shadow:    0px 0px 30px 0px rgba(0, 255, 0, 0.67);
+            box-shadow:         0px 0px 30px 0px rgba(0, 255, 0, 0.67);
+        }
+       .col-md-4:last-of-type:hover{
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            -webkit-box-shadow: 0px 0px 30px 0px rgba(255,255,255,255);
+            -moz-box-shadow:    0px 0px 30px 0px rgba(255,255,255,255);
+            box-shadow:         0px 0px 30px 0px rgba(255,255,255,255);
+        }
+        body{
+            background-image: url("http://7-themes.com/data_images/out/3/6776026-beautiful-northern-lights.jpg");
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
+        ul { list-style:outside circle; padding-left:20px; }
+        li { cursor: pointer; }
+        #bullet { color:#0c0; padding:1px 0 0 3px; position:absolute; top:200px; }
+        #modal_frame_one{
+            #display: none;
+            height: 80vh;
+            width: 50vw;
+            position: fixed;
+            left: 25%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: -webkit-linear-gradient(left,rgba(255,0,0,0),rgb(250,250,210));
+            border: 6px double black;
+            padding: 2vh;
+            z-index: 200;
+            display: none;
+            opacity: .3;
+        }
+        #modal_shadow_one{
+            display: none;
+            z-index: 199;
+            background: ghostwhite;
+        opacity: .1;
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 50vw;
+            height: 100vh;
+        }
+        #modal_close_one{
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            color: red;
+            width: 3vw;
+            height: 3vh;
+            background-color: gray;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+        #modal_message_one{
+            color:ghostwhite;
+            font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+            font-size: 60px;
+            opacity: 1;
+
+        }
+
+        #modal_frame_two{
+            #display: none;
+            height: 80vh;
+            width: 50vw;
+            position: fixed;
+            left: 25%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: -webkit-linear-gradient(left,rgba(255,0,0,0),rgb(250,250,0));
+            border: 6px double black;
+            padding: 2vh;
+            z-index: 200;
+            display: none;
+            opacity: .3;
+        }
+        #modal_shadow_two{
+            display: none;
+            z-index: 199;
+            background: ghostwhite;
+            opacity: .1;
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 50vw;
+            height: 100vh;
+        }
+        #modal_close_two{
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            color: red;
+            width: 3vw;
+            height: 3vh;
+            background-color: gray;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+        #modal_message_two{
+            color:purple;
+            font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+            font-size: 60px;
+            opacity: 1;
+
+        }
+
+    </style>
+    <script>
+        $('.col-xs-6').attr("id","modal_show_button");
+        $('li').bind('click', function(e) {
+            var offset = $(e.target).offset();
+            $('#bullet').animate({'top':offset.top},600);
+        });
+        $("li").hover(function(){
+            $(this).animate({ width: "200px" });
+        }, function() {
+            $(this).animate({ width: "100px" });
+        });
+
+        function show_modal_one(message){
+            $("#modal_message_one").html(message);
+            $("#modal_frame_one").show(500);
+            $("#modal_shadow_one").show();
+        }
+        function hide_modal_one(){
+            $("#modal_frame_one").hide();
+            $("#modal_shadow_one").hide();
+        }
+        $(document).ready(function(){
+            $(".one").hover(function(){
+                show_modal_one("Cher Huang<br><a href='https://github.com/Cherchercher'>github</a><br>This is Cher<br>"+
+                                "<a href='https://cn.linkedin.com/pub/cher-huang/a0/51/b1'>linkedIn</a><br>ib.gaga@hotmail.com</br>"
+                       );
+            });
+            $("#modal_shadow_one, #modal_close_one").click(function(){
+                hide_modal_one();
+            });
+        })
+
+
+
+
+        function show_modal_two(message){
+            $("#modal_message_two").html(message);
+            $("#modal_frame_two").show(500);
+            $("#modal_shadow_two").show();
+        }
+        function hide_modal_two(){
+            $("#modal_frame_two").hide();
+            $("#modal_shadow_two").hide();
+        }
+        $(document).ready(function(){
+            $(".two").click(function(){
+                show_modal_two("Cher Huang<br>ib.gaga@hotmail.com<br>9493446655");
+            });
+            $("#modal_shadow_two, #modal_close_two").click(function(){
+                hide_modal_two();
+            });
+        })
+        </script>
+    <script src="js/jquery.flexslider-min.js"></script>
+
+</head>
+<body>
+<div id="modal_frame_one">
+    <div id="modal_close_one">X</div>
+    <div id="modal_message_one">HAHAHAHAHAHHA</div>
+</div>
+<div id="modal_shadow_one">
+</div>
+<div id="modal_frame_two">
+    <div id="modal_close_two">X</div>
+    <div id="modal_message_two">IContact</div>
+</div>
+<div id="modal_shadow_two">
+</div>
+
+
+
+
+
+
+
+
+<div class="row">
+    <div class="col-xs-6 one">about me</div>
+    <div class="col-xs-6"></div>
+</div>
+<div class="row">
+    <div class="col-xs-6 two">contact me6</div>
+    <div class="col-xs-6"></div>
+</div>
+<div class="row">
+    <div class="col-xs-6"></div>
+    <div class="col-xs-6 right">skills</div>
+</div>
+<div class="row">
+    <div class="col-xs-6"></div>
+    <div class="col-xs-6 right">project</div>
+</div>
+
+
+
+/body>
+</html>
